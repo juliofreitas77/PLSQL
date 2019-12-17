@@ -1,0 +1,48 @@
+create or replace procedure PrcTesteCursor
+as
+    vId int;
+    vNome varchar2(100);
+
+    cursor cC1 is 
+        select employee_id, first_name 
+        from hr.employees
+        where rownum < 100 
+        order by employee_id;
+    
+     
+    begin
+        open cC1;
+        
+        loop 
+        
+            dbms_output.put_line('***********************************************************');
+        
+             fetch cC1 into vId, vNome;
+              
+            dbms_output.put_line('Estou VARRENDO a linha ' || cC1%rowcount);
+        
+        exit when cC1%notfound;
+        
+        dbms_output.put_line('ID:   ' || vID);
+        dbms_output.put_line('Nome: ' || vNome);
+        
+        if (cC1%found) then
+
+                dbms_output.put_line('Usando o atributo %Found para verificar se existem registros no cursor');
+          
+         end if;
+            
+      end loop;
+         
+      close cC1;   
+         
+      if (cC1%isopen) then
+
+          dbms_output.put_line('O cursor est? aberto!');
+
+      else
+           dbms_output.put_line('O cursor foi fechado com sucesso!');
+
+      end if;
+         
+    end;
